@@ -8,6 +8,8 @@ import * as yup from "yup";
 import AddImage from "./imagePicker";
 import ErrorModal from "./errorModal";
 
+import validatePesel from "./utils/peselValidator";
+
 type FormData = {
   firstName: string;
   lastName: string;
@@ -51,8 +53,8 @@ export default function ContractorForm() {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     let contractorData = { ...data, image: uUri };
-    const numberPesel = Number(contractorData.pesel);
-    console.log(contractorData);
+
+    // validatePesel(contractorData.pesel as string);
 
     try {
       const response = await fetch("https://localhost:60001/Contractor/Save", {
