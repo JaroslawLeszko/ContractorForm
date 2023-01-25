@@ -51,6 +51,9 @@ export default function ContractorForm() {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     let contractorData = { ...data, image: uUri };
+    const numberPesel = Number(contractorData.pesel);
+    console.log(contractorData);
+
     try {
       const response = await fetch("https://localhost:60001/Contractor/Save", {
         method: "POST",
@@ -64,16 +67,16 @@ export default function ContractorForm() {
       setModalVisible(true);
       console.log(err);
     }
-    console.log(contractorData);
   };
 
   return (
     <>
       <AddImage onAdd={getImageUri} />
-      <View>
+      <View style={styles.inputContainer}>
         <ErrorModal visible={modalVisible} onCancel={endAddGoalHandler} />
         <Controller
           control={control}
+          name="firstName"
           rules={{
             required: true,
           }}
@@ -86,11 +89,11 @@ export default function ContractorForm() {
               value={value}
             />
           )}
-          name="firstName"
         />
-        {errors.firstName && <Text>Minimum 3 znaki.</Text>}
+        {errors.firstName && <Text>Imię musi mieć minnimum 3 znaki.</Text>}
         <Controller
           control={control}
+          name="lastName"
           rules={{
             required: true,
           }}
@@ -103,19 +106,20 @@ export default function ContractorForm() {
               value={value}
             />
           )}
-          name="lastName"
         />
-        {errors.lastName && <Text>Minimum 3 znaki.</Text>}
-        <Picker
-          selectedValue={idType}
-          onValueChange={(itemValue) => {
-            resetField(idType === "Osoba" ? "pesel" : "nip");
-            setIdType(itemValue);
-          }}
-        >
-          <Picker.Item label="Osoba" value={"Osoba"} />
-          <Picker.Item label="Firma" value={"Firma"} />
-        </Picker>
+        {errors.lastName && <Text>Nazwisko musi mieć minnimum 3 znaki.</Text>}
+        <View style={styles.picker}>
+          <Picker
+            selectedValue={idType}
+            onValueChange={(itemValue) => {
+              resetField(idType === "Osoba" ? "pesel" : "nip");
+              setIdType(itemValue);
+            }}
+          >
+            <Picker.Item label="Osoba" value={"Osoba"} />
+            <Picker.Item label="Firma" value={"Firma"} />
+          </Picker>
+        </View>
         {idType === "Osoba" ? (
           <>
             <Controller
@@ -139,12 +143,13 @@ export default function ContractorForm() {
                 />
               )}
             />
-            {errors.pesel && <Text>11 cyfr.</Text>}
+            {errors.pesel && <Text>PESEL musi mieć 11 cyfr.</Text>}
           </>
         ) : (
           <>
             <Controller
               control={control}
+              name="nip"
               rules={{
                 required: true,
                 minLength: 10,
@@ -162,13 +167,18 @@ export default function ContractorForm() {
                   value={value}
                 />
               )}
-              name="nip"
             />
-            {errors.nip && <Text>10 cyfr.</Text>}
+            {errors.nip && <Text>NIP musi mieć 10 cyfr.</Text>}
           </>
         )}
 
-        <Button title="Zapisz" onPress={handleSubmit(onSubmit)} />
+        <View style={styles.submitButton}>
+          <Button
+            title="Zapisz"
+            color="#287F95"
+            onPress={handleSubmit(onSubmit)}
+          />
+        </View>
       </View>
     </>
   );
@@ -176,21 +186,36 @@ export default function ContractorForm() {
 
 const styles = StyleSheet.create({
   inputContainer: {
-    flex: 1,
-    flexDirection: "row",
+    flex: 3,
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
-    backgroundColor: "#144256",
+    // padding: 15,
+    backgroundColor: "#ADD8E6",
+  },
+  picker: {
+    // flex: 1,
+    backgroundColor: "#CAE9F5",
+    justifyContent: "center",
+    width: "90%",
+    borderRadius: 6,
+    marginTop: 12,
   },
 
   textInput: {
     borderWidth: 1,
     borderColor: "#0d2c39",
     backgroundColor: "#9fd2e8",
+    justifyContent: "center",
     color: "#144256",
-    width: "100%",
+    width: "90%",
     borderRadius: 6,
-    padding: 16,
+    padding: 8,
+    marginTop: 12,
+  },
+
+  submitButton: {
+    margin: 15,
+    width: "50%",
   },
 });

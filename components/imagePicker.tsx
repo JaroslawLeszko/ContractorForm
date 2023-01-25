@@ -30,7 +30,9 @@ export default function AddImage(props: Props) {
     <>
       <View style={styles.container}>
         {image && <Image source={{ uri: image }} style={styles.image} />}
-        <Button title="Dodaj zdjęcie" onPress={pickImage} />
+        <View style={styles.addImageButton}>
+          <Button title="Dodaj zdjęcie" color="#287F95" onPress={pickImage} />
+        </View>
       </View>
     </>
   );
@@ -38,15 +40,18 @@ export default function AddImage(props: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 5,
     alignItems: "center",
     justifyContent: "center",
-    margin: 20,
+    backgroundColor: "#ADD8E6",
   },
   image: {
     width: 350,
     height: 350,
-    margin: 20,
+    margin: 15,
     borderRadius: 6,
+  },
+  addImageButton: {
+    width: "50%",
   },
 });
