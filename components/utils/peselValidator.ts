@@ -11,6 +11,7 @@ export default function validatePesel(pesel: string) {
   for (let i = 0; i < peselSplited.length; i++) {
     multipledNumbers.push(peselSplited[i] * multiplers[i]);
   }
+
   const fixedTwoDigitNumber: number[] = [];
 
   for (let i = 0; i < multipledNumbers.length; i++) {
@@ -22,9 +23,10 @@ export default function validatePesel(pesel: string) {
       fixedTwoDigitNumber.push(multipledNumbers[i]);
     }
   }
-  const redcedNumber = fixedTwoDigitNumber
-    .map(Number)
-    .reduce((prev: number, curr: number) => prev + curr, 0);
+  const redcedNumber = fixedTwoDigitNumber.reduce(
+    (prev: number, curr: number) => prev + curr,
+    0
+  );
 
   const controlNumber = 10 - Number(redcedNumber.toString().slice(-1));
 

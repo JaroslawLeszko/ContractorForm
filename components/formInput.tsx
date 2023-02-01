@@ -9,6 +9,7 @@ import AddImage from "./imagePicker";
 import ErrorModal from "./errorModal";
 
 import validatePesel from "./utils/peselValidator";
+import validateNip from "./utils/nipValidator";
 
 type FormData = {
   firstName: string;
@@ -54,10 +55,18 @@ export default function ContractorForm() {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     let contractorData = { ...data, image: uUri };
 
-    if (validatePesel(contractorData.pesel as string) === false) {
-      console.log("Numer PESEL jest niepoprawny");
+    if (contractorData.pesel) {
+      if (validatePesel(contractorData.pesel as string) === false) {
+        console.log("Numer PESEL jest niepoprawny");
+        return;
+      }
     }
-    // console.log(validatePesel("86030503171"));
+
+    if (contractorData.nip) {
+      if (validateNip(contractorData.nip as string) === false) {
+        console.log("Numer NIP jest niepoprawny");
+      }
+    }
 
     try {
       const response = await fetch("https://localhost:60001/Contractor/Save", {
@@ -70,7 +79,6 @@ export default function ContractorForm() {
       console.log(response.body);
     } catch (err) {
       setModalVisible(true);
-      console.log(err);
     }
   };
 
