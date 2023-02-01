@@ -2,6 +2,7 @@ import { StyleSheet, View, Button, Modal, Image, Text } from "react-native";
 
 interface Props {
   visible: boolean;
+  text: string;
   onCancel: () => void;
 }
 
@@ -13,7 +14,7 @@ export default function ErrorModal(props: Props) {
           style={styles.image}
           source={require("../assets/images/warning-512.png")}
         />
-        <Text style={styles.textMessage}>Nie znaleziono metody zapisu.</Text>
+        <Text style={styles.textMessage}>{props.text}</Text>
         <View style={styles.button}>
           <Button title="Zamknij" onPress={props.onCancel} color="red" />
         </View>

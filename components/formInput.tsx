@@ -29,6 +29,7 @@ const schema = yup.object({
 export default function ContractorForm() {
   const [idType, setIdType] = useState("Osoba");
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalText, setModalText] = useState("");
   const [uUri, setUUri] = useState<string | null>("");
   const {
     control,
@@ -57,14 +58,17 @@ export default function ContractorForm() {
 
     if (contractorData.pesel) {
       if (validatePesel(contractorData.pesel as string) === false) {
-        console.log("Numer PESEL jest niepoprawny");
+        setModalVisible(true);
+        setModalText("Numer PESEL jest niepoprawny!");
         return;
       }
     }
 
     if (contractorData.nip) {
       if (validateNip(contractorData.nip as string) === false) {
-        console.log("Numer NIP jest niepoprawny");
+        setModalVisible(true);
+        setModalText("Numer NIP jest niepoprawny!");
+        return;
       }
     }
 
@@ -79,6 +83,7 @@ export default function ContractorForm() {
       console.log(response.body);
     } catch (err) {
       setModalVisible(true);
+      setModalText("Nie znaleziono metody zapisu!");
     }
   };
 
@@ -86,7 +91,11 @@ export default function ContractorForm() {
     <>
       <AddImage onAdd={getImageUri} />
       <View style={styles.inputContainer}>
-        <ErrorModal visible={modalVisible} onCancel={endAddGoalHandler} />
+        <ErrorModal
+          visible={modalVisible}
+          text={modalText}
+          onCancel={endAddGoalHandler}
+        />
         <Controller
           control={control}
           name="firstName"
