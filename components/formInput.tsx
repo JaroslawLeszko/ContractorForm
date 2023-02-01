@@ -54,7 +54,10 @@ export default function ContractorForm() {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     let contractorData = { ...data, image: uUri };
 
-    // validatePesel(contractorData.pesel as string);
+    if (validatePesel(contractorData.pesel as string) === false) {
+      console.log("Numer PESEL jest niepoprawny");
+    }
+    // console.log(validatePesel("86030503171"));
 
     try {
       const response = await fetch("https://localhost:60001/Contractor/Save", {
