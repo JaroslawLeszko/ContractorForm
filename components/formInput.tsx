@@ -9,6 +9,7 @@ import AddImage from "./imagePicker";
 import ErrorModal from "./errorModal";
 
 import validatePesel from "./utils/peselValidator";
+import validateNip from "./utils/nipValidator";
 
 type FormData = {
   firstName: string;
@@ -28,6 +29,7 @@ const schema = yup.object({
 export default function ContractorForm() {
   const [idType, setIdType] = useState("Osoba");
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalText, setModalText] = useState("");
   const [uUri, setUUri] = useState<string | null>("");
   const {
     control,
@@ -54,7 +56,21 @@ export default function ContractorForm() {
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     let contractorData = { ...data, image: uUri };
 
-    // validatePesel(contractorData.pesel as string);
+    if (contractorData.pesel) {
+      if (validatePesel(contractorData.pesel as string) === false) {
+        setModalVisible(true);
+        setModalText("Numer PESEL jest niepoprawny!");
+        return;
+      }
+    }
+
+    if (contractorData.nip) {
+      if (validateNip(contractorData.nip as string) === false) {
+        setModalVisible(true);
+        setModalText("Numer NIP jest niepoprawny!");
+        return;
+      }
+    }
 
     try {
       const response = await fetch("https://localhost:60001/Contractor/Save", {
@@ -67,7 +83,7 @@ export default function ContractorForm() {
       console.log(response.body);
     } catch (err) {
       setModalVisible(true);
-      console.log(err);
+      setModalText("Nie znaleziono metody zapisu!");
     }
   };
 
@@ -75,7 +91,11 @@ export default function ContractorForm() {
     <>
       <AddImage onAdd={getImageUri} />
       <View style={styles.inputContainer}>
-        <ErrorModal visible={modalVisible} onCancel={endAddGoalHandler} />
+        <ErrorModal
+          visible={modalVisible}
+          text={modalText}
+          onCancel={endAddGoalHandler}
+        />
         <Controller
           control={control}
           name="firstName"
