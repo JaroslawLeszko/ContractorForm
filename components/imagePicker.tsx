@@ -19,7 +19,7 @@ export default function AddImage(props: Props) {
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri as SetStateAction<any>);
+      setImage(result.assets[0].uri as SetStateAction<string>);
     }
   };
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function AddImage(props: Props) {
   return (
     <>
       <View style={styles.container}>
-        {image && <Image source={{ uri: image }} style={styles.image} />}
+        {image && <Image testID="image" source={{ uri: image }} style={styles.image} />}
         <View style={styles.addImageButton}>
           <Button title="Dodaj zdjęcie" color="#287F95" onPress={pickImage} />
         </View>

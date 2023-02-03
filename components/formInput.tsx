@@ -71,6 +71,8 @@ export default function ContractorForm() {
         return;
       }
     }
+    console.log(contractorData);
+    
 
     try {
       const response = await fetch("https://localhost:60001/Contractor/Save", {
